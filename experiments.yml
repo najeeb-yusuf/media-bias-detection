@@ -1,0 +1,23 @@
+batch:
+  prompt_types: ['simple','complex']
+  prompt_roles: ['News article writer']
+  response_types: ['multiclass']
+  num_runs: 1
+
+specific:
+  - model: 'gemini'
+    prompt_type: 'role'
+    prompt_role: 'news article writer'
+    response_type: 'binary'
+    fine_tuned: False
+  - model: 'chatgpt'
+    prompt_type: 'simple'
+    prompt_role: 'annotator'
+    response_type: 'multiclass'
+    fine_tuned: True
+
+models:
+  chatgpt: 'gpt-4o'
+  claudeai: 'claude-3-5-sonnet-20240620'
+  gemini: 'gemini-1.5-pro'
+  llama: 'meta-llama-3.1-405b-instruct'

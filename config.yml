@@ -4,13 +4,26 @@ variables:
   prompt:
     prompt_templates:
       simple: Given the following text, classify it into _insert bias detail_. Consider if the article is biased towards one side or the other and if the text has a particular political leaning. Your response should only be a single word for which side the text leans towards _insert bias detail_
-    bias_details:
+      role: Your role is as _insert role_. You are trying to determine if the following text is biased towards any political leaning, either _insert role_. Your response should only be a single word for which side the text leans towards [_insert bias detail_.]
+      complex: >
+        Role - Your role is as a _insert role_. 
+        Task - Given the following text, determine if it exhibits any specific type of bias, particularly _insert bias detail_.
+        Instructions:
+        Lexical Bias: Examine the text for lexical bias, which can arise from the specific choice of words and phrases. This type of bias often manifests in how information is presented, rather than its broader context. Address lexical bias by:
+        Identifying and mitigating polarized or biased terms.
+        Rewriting sentences to shift from an active to a passive voice if needed, while preserving the original meaning.
+        Informational Bias: Assess if the text displays informational bias, which is related to content selection and organization. This bias is evident in how certain information is emphasized or omitted in the text.
+        
+        Response: You should respond with only [_insert response type_].
+
+    bias_detail:
       binary: biased or nonbiased
       multiclass: center, left or right
     responses:
-      binary: Return only 'biased' or 'nonbiased',
+      binary: Return only 'biased' or 'nonbiased'
       multiclass: Return only 'center', 'left' or 'right'
-    roles: ["News article writer","Media bias researcher", "Media bias data annotator"]
+
+    roles: ["News article writer", "Media bias researcher", "Media bias data annotator"]
 experiment_setup:
   conversions:
     prompt_type:
@@ -21,7 +34,25 @@ experiment_setup:
       article: a
       sentence: s
     response_type:
+      binary: b
+      multiclass: m
+    role:
       none: n
-      writer: w
-      researcher: r
-      annotator: a
+      "News article writer": w
+      "Media bias researcher": r
+      "Media bias data annotator": a
+    binary2num:
+      biased: 1
+      nonbiased: 0
+      center: 0
+      left: 1
+      right: 1
+      none: 0
+return_files:
+  overall_return_file_columns: ['Experiment', 'Model', 'Prompt_Type', 'Prompt_Role', 'Prompt', 'Fine_Tuned', 'Classification_Type', 'Detection_Type', 'Accuracy','Precision', 'Recall', 'F1-Score', 'No_Runs']
+  individual_results_dir: individual_results
+  individual_return_file_columns: [
+            'Experiment', 'Run', 'Model', 'Prompt_Type', 'Prompt_Role', 'Prompt',
+            'Text', 'FineTuned', 'Prediction', 'Ground_Truth', 'Timestamp',
+            'Detection_Type', 'Classification_Type'
+        ]
